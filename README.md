@@ -1,0 +1,2 @@
+- Frontend contains the website; HTML, CSS AND JAVASCRIPTS
+-main.js contains visitor count code
