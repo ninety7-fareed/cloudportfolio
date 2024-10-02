@@ -94,8 +94,13 @@
             </li>
           </ul>
 
-          <p>This page has been viewed <a id="counter"></a> times.</p>
-    	  <script src="js/counter.js"></script>
+          <p>This page has been viewed <span id="counter">...</span> times.</p>
+          <script>
+            fetch("https://FareedAzurePortfolio.azurewebsites.net/api/azureportfolio")
+              .then(response => response.text())
+              .then(data => document.getElementById("counter").innerText = data);
+          </script>
+
         </div>
       </div>
 
