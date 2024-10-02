@@ -96,7 +96,7 @@
 
           <p>This page has been viewed <span id="counter">...</span> times.</p>
           <script>
-            fetch("https://FareedAzurePortfolio.azurewebsites.net/api/azureportfolio")
+            fetch("https://azureportfolio.azurewebsites.net/api/azureportfolio")
               .then(response => response.text())
               .then(data => document.getElementById("counter").innerText = data);
           </script>
