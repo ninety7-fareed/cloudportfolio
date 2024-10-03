@@ -69,7 +69,9 @@
             I am passionate about leveraging technology to solve complex problems and improve user experiences. 
             <a class="smoothscroll" href="#about">Start scrolling</a> to learn
             more <a class="smoothscroll" href="#about">about me</a>.
+            
           </h3>
+          <p>This page has been viewed <span id="counter">...</span> times.</p>
           <hr />
           <ul class="social">
             <li>
@@ -93,14 +95,6 @@
               ></a>
             </li>
           </ul>
-
-          <p>This page has been viewed <span id="counter">...</span> times.</p>
-          <script>
-            fetch("https://azureportfolio.azurewebsites.net/api/azureportfolio")
-              .then(response => response.text())
-              .then(data => document.getElementById("counter").innerText = data);
-          </script>
-
         </div>
       </div>
 
@@ -418,6 +412,6 @@
     <script src="js/jquery.fittext.js"></script>
     <script src="js/magnific-popup.js"></script>
     <script src="js/init.js"></script>
-    <script type="text/javascript" src="js/counter-api.js"></script>
+    <script type="text/javascript" src="main.js"></script>
   </body>
 </html>
