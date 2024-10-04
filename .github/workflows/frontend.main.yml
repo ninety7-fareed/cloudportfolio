@@ -27,7 +27,7 @@ jobs:
       with:
         inlineScript: |
           ACCOUNT_KEY=$(az storage account keys list --account-name ${{ secrets.STORAGE_ACCOUNT_NAME }} --resource-group ${{ secrets.RESOURCE_GROUP_NAME }} --query '[0].value' -o tsv)
-          az storage blob upload-batch --account-name ${{ secrets.STORAGE_ACCOUNT_NAME }} --account-key "$ACCOUNT_KEY" -d '$web' -s frontend/
+          az storage blob upload-batch --account-name ${{ secrets.STORAGE_ACCOUNT_NAME }} --account-key "$ACCOUNT_KEY" -d '$web' -s frontend/ --overwrite
     
     - name: Purge CDN endpoint
       uses: azure/CLI@v1
