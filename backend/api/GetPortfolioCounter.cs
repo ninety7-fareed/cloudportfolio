@@ -32,7 +32,7 @@ namespace Company.Function
                 Connection = "AzurePortfolioConnectionString")] IAsyncCollector<Counter> counterOut,
             ILogger log)
         {
-            //This here is where the counter gets updated.
+            //This right here is where the counter gets updated.
             log.LogInformation("C# HTTP trigger function processed a request.");
 
             if (counter == null)
