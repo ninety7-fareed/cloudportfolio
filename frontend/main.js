@@ -2,12 +2,13 @@ console.log("Counter script is running");
 
 document.addEventListener('DOMContentLoaded', initializeCounter);
 
-const functionApi = 'http://localhost:7071/api/GetPortfolioCounter';
+const functionApiUrl = 'https://getportfoliocounter97.azurewebsites.net/api/GetPortfolioCounter?'
+const localfunctionApi = 'http://localhost:7071/api/GetPortfolioCounter';
 
 async function initializeCounter() {
     console.log("Initializing counter");
     try {
-        const response = await fetch(functionApi);
+        const response = await fetch(functionApiUrl);
         console.log("Response status:", response.status);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
