@@ -26,8 +26,8 @@ jobs:
       uses: azure/CLI@v1
       with:
         inlineScript: |
-          az storage account show --name ${{ secrets.STORAGE_ACCOUNT_NAME }} --resource-group ${{ secrets.RESOURCE_GROUP_NAME }}
-          az storage blob upload-batch --account-name ${{ secrets.STORAGE_ACCOUNT_NAME }} --auth-mode login -d '$web' -s frontend/
+          ACCOUNT_KEY=$(az storage account keys list --account-name ${{ secrets.STORAGE_ACCOUNT_NAME }} --resource-group ${{ secrets.RESOURCE_GROUP_NAME }} --query '[0].value' -o tsv)
+          az storage blob upload-batch --account-name ${{ secrets.STORAGE_ACCOUNT_NAME }} --account-key "$ACCOUNT_KEY" -d '$web' -s frontend/
     
     - name: Purge CDN endpoint
       uses: azure/CLI@v1
