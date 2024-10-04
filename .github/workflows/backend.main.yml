@@ -10,7 +10,7 @@ env:
   AZURE_FUNCTIONAPP_NAME: 'GetPortfolioCounter97'
   AZURE_FUNCTIONAPP_PACKAGE_PATH: 'backend'
   DOTNET_VERSION: '8.0.x'
-  AZURE_RESOURCE_GROUP: 'YourResourceGroupName'  # Replace with your actual resource group name
+  AZURE_RESOURCE_GROUP: 'getportfoliocounter97'  
 
 jobs:
   build-and-deploy:
