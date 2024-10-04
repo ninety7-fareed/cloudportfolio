@@ -7,7 +7,7 @@ on:
     - 'backend/**'
 
 env:
-  AZURE_FUNCTIONAPP_NAME: 'GetPortfolioCounter97'  # Updated to match the actual name
+  AZURE_FUNCTIONAPP_NAME: 'GetPortfolioCounter97'
   AZURE_FUNCTIONAPP_PACKAGE_PATH: 'backend'
   DOTNET_VERSION: '8.0.x'
   AZURE_RESOURCE_GROUP: 'YourResourceGroupName'  # Replace with your actual resource group name
@@ -44,18 +44,21 @@ jobs:
         popd
 
     - name: 'List Azure Function Apps'
+      shell: pwsh
       run: |
         az functionapp list --query "[].{name:name, resourceGroup:resourceGroup}" -o table
 
     - name: 'Check if Function App exists'
       id: check_function_app
+      shell: pwsh
       run: |
-        EXISTS=$(az functionapp show --name ${{ env.AZURE_FUNCTIONAPP_NAME }} --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --query "name" -o tsv)
-        echo "Function app exists: $EXISTS"
-        echo "EXISTS=$EXISTS" >> $GITHUB_OUTPUT
+        $exists = az functionapp show --name ${{ env.AZURE_FUNCTIONAPP_NAME }} --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --query "name" -o tsv
+        echo "Function app exists: $exists"
+        echo "EXISTS=$exists" >> $env:GITHUB_OUTPUT
 
     - name: 'Create Azure Function App if not exists'
       if: steps.check_function_app.outputs.EXISTS != env.AZURE_FUNCTIONAPP_NAME
+      shell: pwsh
       run: |
         az functionapp create --name ${{ env.AZURE_FUNCTIONAPP_NAME }} --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --consumption-plan-location westus --runtime dotnet --functions-version 4
 
