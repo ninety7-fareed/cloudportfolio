@@ -7,9 +7,10 @@ on:
     - 'backend/**'
 
 env:
-  AZURE_FUNCTIONAPP_NAME: 'GetPortfolioCounter97'   # set this to your function app name on Azure
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: 'backend'       # set this to the path to your function app project, defaults to the repository root
-  DOTNET_VERSION: '8.0.x'                   # set this to the dotnet version to use (e.g. '2.1.x', '3.1.x', '5.0.x')
+  AZURE_FUNCTIONAPP_NAME: 'GetPortfolioCounter97'  # Updated to match the actual name
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: 'backend'
+  DOTNET_VERSION: '8.0.x'
+  AZURE_RESOURCE_GROUP: 'YourResourceGroupName'  # Replace with your actual resource group name
 
 jobs:
   build-and-deploy:
@@ -18,7 +19,6 @@ jobs:
     - name: 'Checkout GitHub Action'
       uses: actions/checkout@v3
 
-      
     - name: 'Login via Azure CLI'
       uses: azure/login@v1
       with:
@@ -35,15 +35,38 @@ jobs:
         pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/api'
         dotnet build --configuration Release --output ./output
         popd
-    - name: 'Run unit test'
+
+    - name: 'Run unit tests'
       shell: pwsh
       run: |
         pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/tests'
         dotnet test
+        popd
+
+    - name: 'List Azure Function Apps'
+      run: |
+        az functionapp list --query "[].{name:name, resourceGroup:resourceGroup}" -o table
+
+    - name: 'Check if Function App exists'
+      id: check_function_app
+      run: |
+        EXISTS=$(az functionapp show --name ${{ env.AZURE_FUNCTIONAPP_NAME }} --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --query "name" -o tsv)
+        echo "Function app exists: $EXISTS"
+        echo "EXISTS=$EXISTS" >> $GITHUB_OUTPUT
+
+    - name: 'Create Azure Function App if not exists'
+      if: steps.check_function_app.outputs.EXISTS != env.AZURE_FUNCTIONAPP_NAME
+      run: |
+        az functionapp create --name ${{ env.AZURE_FUNCTIONAPP_NAME }} --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --consumption-plan-location westus --runtime dotnet --functions-version 4
+
     - name: 'Run Azure Functions Action'
       uses: Azure/functions-action@v1
       id: fa
       with:
         app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
         package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/api/output'
-        
+
+    - name: 'Logout of Azure'
+      run: |
+        az logout
+      if: always()
